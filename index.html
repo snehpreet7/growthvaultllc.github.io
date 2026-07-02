@@ -51,6 +51,112 @@
 
   .wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad);}
 
+  /* ---------- CUSTOM CURSOR ---------- */
+  body.has-cursor, body.has-cursor a, body.has-cursor button{cursor:none;}
+  .cursor-dot,.cursor-ring{
+    position:fixed;top:0;left:0;z-index:998;pointer-events:none;
+    transform:translate(-50%,-50%);will-change:transform;
+    opacity:0;transition:opacity .3s ease;
+  }
+  body.cursor-on .cursor-dot,body.cursor-on .cursor-ring{opacity:1;}
+  .cursor-dot{width:6px;height:6px;border-radius:50%;background:var(--violet-glow);
+    box-shadow:0 0 12px rgba(167,139,250,.8);}
+  .cursor-ring{
+    width:36px;height:36px;border-radius:50%;
+    border:1px solid rgba(167,139,250,.45);
+    display:flex;align-items:center;justify-content:center;
+    transition:width .35s var(--ease),height .35s var(--ease),
+               background .35s ease,border-color .35s ease,opacity .3s ease;
+  }
+  .cursor-ring .clabel{
+    font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+    color:#0a0a0f;opacity:0;transform:scale(.6);
+    transition:opacity .25s ease,transform .25s var(--ease);white-space:nowrap;
+  }
+  .cursor-ring.is-link{width:58px;height:58px;background:rgba(167,139,250,.1);
+    border-color:rgba(167,139,250,.7);}
+  .cursor-ring.is-label{width:74px;height:74px;background:var(--violet);border-color:var(--violet);}
+  .cursor-ring.is-label .clabel{opacity:1;transform:scale(1);}
+  .cursor-ring.is-down{width:26px;height:26px;}
+  @media(pointer:coarse){.cursor-dot,.cursor-ring{display:none;}}
+
+  /* ---------- BURGER ---------- */
+  .burger{
+    width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
+    background:transparent;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:6px;
+    transition:border-color .3s ease,background .3s ease;position:relative;z-index:400;
+  }
+  .burger:hover{border-color:var(--violet);}
+  .burger span{
+    display:block;width:18px;height:1.5px;background:var(--text);
+    transition:transform .45s var(--ease),opacity .3s ease,background .3s ease;
+  }
+  .menu-open .burger span:nth-child(1){transform:translateY(3.75px) rotate(45deg);}
+  .menu-open .burger span:nth-child(2){transform:translateY(-3.75px) rotate(-45deg);}
+  .nav-right{display:flex;align-items:center;gap:14px;}
+
+  /* ---------- FULLSCREEN MENU ---------- */
+  .menu{
+    position:fixed;inset:0;z-index:350;
+    background:radial-gradient(ellipse 80% 60% at 80% 0%,rgba(124,92,240,.13),transparent 60%),var(--void);
+    clip-path:circle(0px at calc(100% - 52px) 40px);
+    transition:clip-path .8s var(--ease);
+    visibility:hidden;pointer-events:none;
+    display:flex;align-items:center;overflow:hidden;
+  }
+  .menu-open .menu{clip-path:circle(150% at calc(100% - 52px) 40px);
+    visibility:visible;pointer-events:auto;}
+  .menu-inner{width:100%;max-width:var(--maxw);margin:0 auto;
+    padding:100px var(--pad) 60px;display:grid;
+    grid-template-columns:1.3fr .7fr;gap:60px;align-items:end;}
+  .menu-links{display:flex;flex-direction:column;}
+  .m-item{overflow:hidden;padding:4px 0;}
+  .m-link{
+    font-family:var(--display);font-weight:700;
+    font-size:clamp(38px,7vw,72px);letter-spacing:-.03em;line-height:1.12;
+    display:inline-flex;align-items:baseline;gap:20px;
+    transform:translateY(110%);transition:transform .9s var(--ease),color .3s ease;
+    position:relative;color:var(--text);
+  }
+  .menu-open .m-link{transform:translateY(0);}
+  .menu-open .m-item:nth-child(1) .m-link{transition-delay:.25s;}
+  .menu-open .m-item:nth-child(2) .m-link{transition-delay:.33s;}
+  .menu-open .m-item:nth-child(3) .m-link{transition-delay:.41s;}
+  .menu-open .m-item:nth-child(4) .m-link{transition-delay:.49s;}
+  .m-link .idx{font-family:var(--mono);font-size:13px;font-weight:400;
+    color:var(--muted-dim);letter-spacing:.1em;transition:color .3s ease;}
+  .m-link .txt{position:relative;}
+  .m-link .txt::after{
+    content:"";position:absolute;left:0;bottom:6%;width:100%;height:.08em;
+    background:var(--violet);transform:scaleX(0);transform-origin:0 50%;
+    transition:transform .5s var(--ease);
+  }
+  .m-link:hover{color:var(--violet);}
+  .m-link:hover .idx{color:var(--violet);}
+  .m-link:hover .txt::after{transform:scaleX(1);}
+  .menu-meta{display:flex;flex-direction:column;gap:26px;
+    opacity:0;transform:translateY(20px);
+    transition:opacity .7s ease,transform .7s var(--ease);}
+  .menu-open .menu-meta{opacity:1;transform:none;transition-delay:.55s;}
+  .menu-meta h6{font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted-dim);margin-bottom:10px;}
+  .menu-meta a{display:block;color:var(--muted);font-size:15px;margin-bottom:8px;
+    transition:color .25s ease;}
+  .menu-meta a:hover{color:var(--violet);}
+  .menu-bg-word{
+    position:absolute;bottom:-4vw;left:0;width:100%;
+    font-family:var(--display);font-weight:800;
+    font-size:clamp(80px,17vw,260px);letter-spacing:-.04em;line-height:1;
+    color:transparent;-webkit-text-stroke:1px rgba(167,139,250,.08);
+    white-space:nowrap;pointer-events:none;user-select:none;
+    transform:translateY(30%);transition:transform 1.2s var(--ease) .3s;
+  }
+  .menu-open .menu-bg-word{transform:translateY(0);}
+  @media(max-width:860px){
+    .menu-inner{grid-template-columns:1fr;align-items:start;align-content:center;gap:44px;}
+  }
+
   .eyebrow{
     font-family:var(--mono);
     font-size:11px;
@@ -501,10 +607,43 @@
 
 <div class="progress" id="progress"></div>
 
+<!-- custom cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"><span class="clabel" id="cursorLabel"></span></div>
+
+<!-- fullscreen menu -->
+<div class="menu" id="menu" aria-hidden="true">
+  <div class="menu-bg-word" aria-hidden="true">GROWTHVAULT</div>
+  <div class="menu-inner">
+    <nav class="menu-links">
+      <div class="m-item"><a class="m-link" href="#flagship" data-menuclose><span class="idx">01</span><span class="txt">What we build</span></a></div>
+      <div class="m-item"><a class="m-link" href="#approach" data-menuclose><span class="idx">02</span><span class="txt">How we work</span></a></div>
+      <div class="m-item"><a class="m-link" href="#company" data-menuclose><span class="idx">03</span><span class="txt">About</span></a></div>
+      <div class="m-item"><a class="m-link" href="mailto:info@growthvaultllc.com"><span class="idx">04</span><span class="txt">Contact</span></a></div>
+    </nav>
+    <div class="menu-meta">
+      <div>
+        <h6>Get in touch</h6>
+        <a href="mailto:info@growthvaultllc.com">info@growthvaultllc.com</a>
+        <a href="tel:+16508999799">+1 (650) 899-9799</a>
+      </div>
+      <div>
+        <h6>Studio</h6>
+        <a href="#company" data-menuclose>Sacramento, California</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <header id="header">
   <nav class="nav">
     <a class="logo" href="#top"><span class="mark"></span><b>Growth<span>Vault</span></b></a>
-    <a class="nav-cta" href="mailto:info@growthvaultllc.com">Get in touch ↗</a>
+    <div class="nav-right">
+      <a class="nav-cta" href="mailto:info@growthvaultllc.com">Get in touch ↗</a>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
   </nav>
 </header>
 
@@ -637,7 +776,7 @@
         </div>
       </div>
 
-      <div class="phone-stage reveal d1" id="phoneStage">
+      <div class="phone-stage reveal d1" id="phoneStage" data-cursor="TextRizz">
         <div class="phone-glow"></div>
         <div class="phone">
           <div class="phone-screen">
@@ -792,6 +931,95 @@
     l.setAttribute('x1',cx+80*Math.sin(a));l.setAttribute('y1',cy-80*Math.cos(a));
     l.setAttribute('x2',cx+140*Math.sin(a));l.setAttribute('y2',cy-140*Math.cos(a));
     spokes.appendChild(l);
+  }
+
+  /* ---- custom cursor (fine pointers only) ---- */
+  const fine=matchMedia('(pointer:fine)').matches;
+  if(fine && !reduce){
+    document.body.classList.add('has-cursor');
+    const dot=document.getElementById('cursorDot');
+    const ring=document.getElementById('cursorRing');
+    const label=document.getElementById('cursorLabel');
+    let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my,shown=false;
+
+    addEventListener('mousemove',e=>{
+      mx=e.clientX;my=e.clientY;
+      if(!shown){shown=true;document.body.classList.add('cursor-on');}
+    },{passive:true});
+    addEventListener('mousedown',()=>ring.classList.add('is-down'));
+    addEventListener('mouseup',()=>ring.classList.remove('is-down'));
+    document.documentElement.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-on'));
+    document.documentElement.addEventListener('mouseenter',()=>{if(shown)document.body.classList.add('cursor-on');});
+
+    (function cursorLoop(){
+      rx+=(mx-rx)*0.16; ry+=(my-ry)*0.16;
+      dot.style.transform='translate('+(mx-3)+'px,'+(my-3)+'px)';
+      ring.style.transform='translate('+(rx-ring.offsetWidth/2)+'px,'+(ry-ring.offsetHeight/2)+'px)';
+      requestAnimationFrame(cursorLoop);
+    })();
+
+    // hover states via delegation
+    document.addEventListener('mouseover',e=>{
+      const labeled=e.target.closest('[data-cursor]');
+      const link=e.target.closest('a,button');
+      if(labeled){
+        label.textContent=labeled.dataset.cursor;
+        ring.classList.add('is-label');ring.classList.remove('is-link');
+      }else if(link){
+        ring.classList.add('is-link');ring.classList.remove('is-label');
+      }else{
+        ring.classList.remove('is-link','is-label');
+      }
+    },{passive:true});
+  }
+
+  /* ---- fullscreen menu ---- */
+  const burger=document.getElementById('burger');
+  const menu=document.getElementById('menu');
+  function setMenu(open){
+    document.body.classList.toggle('menu-open',open);
+    burger.setAttribute('aria-expanded',open);
+    menu.setAttribute('aria-hidden',!open);
+    burger.setAttribute('aria-label',open?'Close menu':'Open menu');
+  }
+  burger.addEventListener('click',()=>setMenu(!document.body.classList.contains('menu-open')));
+  addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false);});
+  document.querySelectorAll('[data-menuclose]').forEach(a=>{
+    a.addEventListener('click',()=>setTimeout(()=>setMenu(false),150));
+  });
+
+  /* ---- premium inertia smooth scroll (wheel, fine pointers, motion ok) ---- */
+  let smoothOn=false;
+  if(fine && !reduce){
+    smoothOn=true;
+    document.documentElement.style.scrollBehavior='auto';
+    let targetY=scrollY,curY=scrollY,animating=false;
+    const maxScroll=()=>document.documentElement.scrollHeight-innerHeight;
+    function glide(){
+      curY+=(targetY-curY)*0.085;
+      if(Math.abs(targetY-curY)<0.5){curY=targetY;animating=false;}
+      scrollTo(0,curY);
+      if(animating)requestAnimationFrame(glide);
+    }
+    function kick(){if(!animating){animating=true;requestAnimationFrame(glide);}}
+    addEventListener('wheel',e=>{
+      if(document.body.classList.contains('menu-open'))return;
+      e.preventDefault();
+      targetY=Math.max(0,Math.min(maxScroll(),targetY+e.deltaY));
+      kick();
+    },{passive:false});
+    // keep in sync if user drags scrollbar / uses keyboard
+    addEventListener('scroll',()=>{if(!animating){targetY=curY=scrollY;}},{passive:true});
+    // smooth anchor jumps
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click',e=>{
+        const t=document.querySelector(a.getAttribute('href'));
+        if(!t)return;
+        e.preventDefault();
+        targetY=Math.max(0,Math.min(maxScroll(),t.getBoundingClientRect().top+scrollY-70));
+        kick();
+      });
+    });
   }
 
   /* ---- load reveal ---- */
